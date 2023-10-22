@@ -32,10 +32,6 @@ public class CommentService {
     }
 
     public void deleteComment(Long id) {
-        try {
-            commentRepository.deleteById(id);
-        } catch (IllegalArgumentException e) {
-            throw new NoSuchCommentException();
-        }
+        commentRepository.deleteById(id);
     }
 }
