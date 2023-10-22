@@ -9,6 +9,8 @@ import com.example.convention.controller.request.CommentRequest;
 import com.example.convention.controller.response.CommentResponse;
 import com.example.convention.entity.Comment;
 import com.example.convention.service.CommentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +27,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
+@Tag(name = "Comment", description = "댓글 API")
 public class CommentController {
 
     private final CommentService commentService;
 
     @GetMapping
-    public DataResponseBody<List<CommentResponse>> getComments() {
+    @Operation(summary = "댓글 목록")
+    public DataResponseBody<List<CommentResponse>> getComme록ts() {
         List<Comment> comments = commentService.getComments();
         List<CommentResponse> commentResponses = toCommentResponses(comments);
         return DataResponseBody.ok(commentResponses);
     }
 
     @PostMapping
+    @Operation(summary = "댓글 작성")
     public DataResponseBody<CommentResponse> addComment(
         @Valid @RequestBody CommentRequest commentRequest
     ) {
@@ -46,6 +51,7 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "댓글 수정")
     public DataResponseBody<CommentResponse> editComment(
         @PathVariable Long id,
         @Valid @RequestBody CommentRequest commentRequest
@@ -56,6 +62,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "댓글 삭제")
     public BaseResponseBody deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
         return BaseResponseBody.ok();
